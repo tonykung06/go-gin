@@ -9,7 +9,7 @@ var employees = map[string]Employee{
 		LastName:  "last name 1",
 		Position:  "position 1",
 		StartDate: time.Now().Add(-13 * time.Hour * 24 * 365),
-		TotalPTO:  30,
+		TotalPTO:  30.,
 	},
 	"962146": Employee{
 		ID:        962146,
@@ -17,7 +17,7 @@ var employees = map[string]Employee{
 		LastName:  "last name 2",
 		Position:  "position 2",
 		StartDate: time.Now().Add(-13 * time.Hour * 24 * 365),
-		TotalPTO:  30,
+		TotalPTO:  30.,
 	},
 	"962147": Employee{
 		ID:        962147,
@@ -25,7 +25,7 @@ var employees = map[string]Employee{
 		LastName:  "last name 3",
 		Position:  "position 3",
 		StartDate: time.Now().Add(-13 * time.Hour * 24 * 365),
-		TotalPTO:  30,
+		TotalPTO:  30.,
 	},
 	"962148": Employee{
 		ID:        962148,
@@ -33,7 +33,7 @@ var employees = map[string]Employee{
 		LastName:  "last name 4",
 		Position:  "position 4",
 		StartDate: time.Now().Add(-13 * time.Hour * 24 * 365),
-		TotalPTO:  30,
+		TotalPTO:  30.,
 	},
 }
 
@@ -62,10 +62,10 @@ var TimesOff = map[string][]TimeOff{
 
 type Employee struct {
 	ID        int
-	TotalPTO  int
-	FirstName string
-	LastName  string
-	Position  string
+	TotalPTO  float32 `form:"pto"`
+	FirstName string  `form:"firstName"`
+	LastName  string  `form:"lastName"`
+	Position  string  `form:"position"`
 	Status    string
 	StartDate time.Time
 	TimesOff  []TimeOff

@@ -1,1 +1,12 @@
 <h1>Admin Page</h1>
+<table>
+	<tbody>
+	{{range .}}
+		<tr>
+			<td>{{.FirstName}}</td>
+			<td>{{.LastName}}</td>
+			<td>{{.Position}}</td>
+		</tr>
+	{{end}}
+	</tbody>
+</table>

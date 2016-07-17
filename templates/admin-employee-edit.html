@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<form action="" method="post">
+		<div>
+			<label for="firstName">First Name:</label>
+			<input type="text" name="firstName" id="firstName" value="{{.Employee.FirstName}}" />
+		</div>
+		<div>
+			<label for="lastName">Last Name:</label>
+			<input type="text" name="lastName" id="lastName" value="{{.Employee.LastName}}" />
+		</div>
+		<div>
+			<label for="pto">PTO:</label>
+			<input type="number" name="pto" id="pto" value="{{.Employee.TotalPTO}}" />
+		</div>
+		<div>
+			<label for="position">Position:</label>
+			<select name="position" id="position">
+				<option value="CEO" {{if eq .Employee.Position "CEO"}}selected{{end}}>CEO</option>
+				<option value="CTO" {{if eq .Employee.Position "CTO"}}selected{{end}}>CTO</option>
+				<option value="COO" {{if eq .Employee.Position "COO"}}selected{{end}}>COO</option>
+				<option value="WorkerBee" {{if eq .Employee.Position "WorkerBee"}}selected{{end}}>Worker Bee</option>
+			</select>
+		</div>
+		<div>
+			<label for="startDate">Start Date:</label>
+			<input type="date" name="startDate" id="startDate" value="{{.Employee.StartDate.Format "2006-01-02"}}" />
+		</div>
+		<button type="submit">Add</button>
+	</form>
+</body>
+</html>
