@@ -23,5 +23,44 @@
     {{end}}
 	</tbody>
 </table>
+<form id="vacationForm" onsubmit="return addVacation()">
+	<div>
+		<label for="startDate">Start Date:</label>
+		<input type="date" required="required" name="startDate" id="startDate" />
+	</div>
+	<div>
+		<label for="hours">Hours:</label>
+		<input type="number" required="required" name="hours" id="hours" />
+	</div>
+	<div>
+		<label for="reason">Reason:</label>
+		<input type="text" required="required" name="reason" id="reason" />
+	</div>
+	<button type="submit">Add</button>
+</form>
+<script type="text/javascript">
+	function addVacation(e) {
+		var allInputEls = [].slice.call(document.getElementById("vacationForm").elements);
+		var submitValues = {
+			status: "new"
+		};
+		allInputEls.forEach(function(field) {
+			var value;
+			if (field.type !== "submit") {
+				value = field.value;
+				if (field.type === "date") {
+					value = new Date(field.value)
+				} else if (field.type === 'number') {
+					value = Number(value) || 0;
+				}
+				submitValues[field.name] = value;
+			}
+		});
+		var xhr = new XMLHttpRequest();
+		xhr.open('post', location.pathname + '/new');
+		xhr.send(JSON.stringify(submitValues));
+		return false;
+	}
+</script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -44,6 +44,23 @@ func registerRoutes() *gin.Engine {
 		c.HTML(http.StatusOK, "vacation-overview.html", map[string]interface{}{
 			"TimesOff": timesOff,
 		})
+	})
+
+	r.POST("/employees/:id/vacation/new", func(c *gin.Context) {
+		var timeOff TimeOff
+		err := c.BindJSON(&timeOff)
+		fmt.Println(timeOff)
+		if err != nil {
+			c.String(http.StatusBadRequest, err.Error())
+			return
+		}
+		id := c.Param("id")
+		timesOff, ok := TimesOff[id]
+		if !ok {
+			TimesOff[id] = []TimeOff{}
+		}
+		TimesOff[id] = append(timesOff, timeOff)
+		c.Status(http.StatusOK)
 	})
 
 	admin := r.Group("/admin", gin.BasicAuth(gin.Accounts{

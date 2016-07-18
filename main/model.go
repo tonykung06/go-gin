@@ -62,18 +62,21 @@ var TimesOff = map[string][]TimeOff{
 
 type Employee struct {
 	ID        int
-	TotalPTO  float32 `form:"pto"`
-	FirstName string  `form:"firstName"`
-	LastName  string  `form:"lastName"`
-	Position  string  `form:"position"`
+	TotalPTO  float32 `form:"pto" json:"pto"`
+	FirstName string  `form:"firstName" json:"firstName"`
+	LastName  string  `form:"lastName" json:"lastName"`
+	Position  string  `form:"position" json:"position"`
 	Status    string
 	StartDate time.Time
 	TimesOff  []TimeOff
 }
 
 type TimeOff struct {
-	Type      string
-	Status    string
-	Amount    float32
-	StartDate time.Time
+	//binding="required"
+	//other validations gin provides: max, min, eq, ne, gt, lt, len, eqfield, nefield, dive, numeric, alpha
+	//see https://github.com/go-playground/validator/tree/v8.18.1
+	Type      string    `json:"reason" binding:"required"`
+	Status    string    `json:"status" binding:"required"`
+	Amount    float32   `json:"hours" binding:"required,gt=0"`
+	StartDate time.Time `json:"startDate" binding:"required"`
 }
