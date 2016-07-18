@@ -22,6 +22,10 @@ func registerRoutes() *gin.Engine {
 
 	//optional parameter example: /employees/*id
 	r.GET("/employees/:id/vacation", func(c *gin.Context) {
+		// c.SetAccepted("application/json", "application/x-www-form-urlencoded", "text/html")
+		// fmt.Println("updated client's Accept header", c.Accepted, c.Request.Header.Get("Accept"))
+		//func (c *Context) Negotiate(code int, config Negotiate)
+
 		id := c.Param("id") //returns empty string when the item doesn't exist
 
 		//to pull in type query arg from /employees/42/vacation?query=Holiday
@@ -41,7 +45,7 @@ func registerRoutes() *gin.Engine {
 			return
 		}
 
-		c.HTML(http.StatusOK, "vacation-overview.html", map[string]interface{}{
+		c.HTML(http.StatusOK, "vacation-overview.html", gin.H{
 			"TimesOff": timesOff,
 		})
 	})
@@ -60,7 +64,12 @@ func registerRoutes() *gin.Engine {
 			TimesOff[id] = []TimeOff{}
 		}
 		TimesOff[id] = append(timesOff, timeOff)
-		c.Status(http.StatusOK)
+		// default response: c.Status(http.StatusOK)
+
+		// c.JSON(http.StatusCreated, gin.H{
+		// 	id: 123,
+		// })
+		c.JSON(http.StatusCreated, &timeOff)
 	})
 
 	admin := r.Group("/admin", gin.BasicAuth(gin.Accounts{
