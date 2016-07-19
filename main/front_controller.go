@@ -2,21 +2,41 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func registerRoutes() *gin.Engine {
 	//default router with basic middlewares, like login, security, compression
 	//alternatively, gin.New() comes without middlewares
 	r := gin.Default()
+	r.Use(loginMiddleware)
 	r.LoadHTMLGlob("templates/*.html") //not responding to template updates
-	r.GET("/", func(c *gin.Context) {
+	r.Any("/", func(c *gin.Context) {
 		// c.String(http.StatusOK, "Hello from %v", "Gin")
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
-	r.GET("/login", func(c *gin.Context) {
+	r.Any("/login", func(c *gin.Context) {
+		employeeNumber := c.PostForm("employeeNumber")
+		password := c.PostForm("password")
+		for _, identity := range identities {
+			if identity.employeeNumber == employeeNumber && identity.password == password {
+				lc := loginCookie{
+					value:      employeeNumber,
+					expiration: time.Now().Add(24 * time.Hour),
+					origin:     c.Request.RemoteAddr,
+				}
+				loginCookies[lc.value] = &lc
+				maxAge := lc.expiration.Unix() - time.Now().Unix()
+				c.SetCookie(loginCookieName, lc.value, int(maxAge), "", "", false, true)
+				//this will redirect as post request
+				c.Redirect(http.StatusTemporaryRedirect, "/")
+				return
+			}
+		}
+
 		c.HTML(http.StatusOK, "login.html", nil)
 	})
 
